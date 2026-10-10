@@ -1,0 +1,6 @@
+interface:
+  display_name: "Video to PPT"
+  short_description: "Extract video slides into a clean PPTX"
+  default_prompt: "Use $video-to-ppt to extract the presentation slides from this video and build a PPTX."
+policy:
+  allow_implicit_invocation: true
