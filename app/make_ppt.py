@@ -43,7 +43,7 @@ def natural_key(path: Path) -> tuple[tuple[int, object], ...]:
     )
 
 
-def build_presentation(folder: Path) -> Path:
+def build_presentation(folder: Path, output_path: Path | None = None) -> Path:
     if not folder.is_dir():
         raise ValueError(f"不是文件夹：{folder}")
 
@@ -86,7 +86,8 @@ def build_presentation(folder: Path) -> Path:
             picture.crop_left = crop
             picture.crop_right = crop
 
-    output_path = folder.parent / f"{folder.name}_16x9.pptx"
+    output_path = output_path or folder.parent / f"{folder.name}_16x9.pptx"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     presentation.save(output_path)
     return output_path
 

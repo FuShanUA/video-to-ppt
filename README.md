@@ -13,7 +13,20 @@
 - 生成 `manifest.tsv`、`report.json` 和 `review/contact_sheet.jpg`，便于复核漏页和排除原因。
 - 桌面应用支持拖入图片文件夹或视频文件。
 
-## 安装
+## Windows 桌面应用
+
+从 GitHub Releases 下载 `VideoToPPT.exe` 后可以直接运行。EXE 内置 Python 依赖、FFmpeg 和 FFprobe，不需要另装 Python。
+
+界面支持：
+
+- 选择视频文件或图片文件夹，生成 16:9 PPTX。
+- 输入多个强制补页时间点，例如 `73:49, 74:49`。
+- 选择是否排除纯软件演示画面。
+- 查看处理日志，完成后打开输出文件夹。
+
+Windows 版由 GitHub Actions 构建，流程见 `.github/workflows/windows.yml`。
+
+## 本地安装
 
 需要 Python 3.11+、FFmpeg，以及 Python 依赖：
 
@@ -39,6 +52,15 @@ python3 -m pip install -r requirements.txt
 ```bash
 VIDEO_TO_PPT_PYTHON=/path/to/python ./app/build_app.sh
 ```
+
+Windows 本地构建需要安装 Python、FFmpeg 和 PyInstaller，然后执行：
+
+```powershell
+python -m pip install -r requirements.txt pyinstaller
+pyinstaller --onefile --windowed --name VideoToPPT --paths skill/scripts --paths app app/gui.py
+```
+
+如需开箱即用，还要把本机的 `ffmpeg.exe` 和 `ffprobe.exe` 用 `--add-binary` 加入打包命令。
 
 ## 命令行用法
 
@@ -84,3 +106,5 @@ python3 skill/scripts/video_to_ppt.py INPUT.mp4 --crop 304,80,976,610
 ## 许可
 
 MIT License。
+
+Windows 发布版捆绑 BtbN 的 FFmpeg GPL 构建，详见 `THIRD_PARTY.md`。

@@ -100,6 +100,11 @@ def parse_crop(text: str) -> tuple[int, int, int, int]:
     return x, y, w, h
 
 
+def crop_box(crop: tuple[int, int, int, int]) -> tuple[int, int, int, int]:
+    x, y, width, height = crop
+    return x, y, x + width, y + height
+
+
 def parse_time(text: str) -> float:
     value = text.strip()
     if re.fullmatch(r"\d+(?:\.\d+)?", value):
@@ -250,7 +255,7 @@ def dhash(image: Image.Image) -> int:
 
 def load_feature(path: Path, crop: tuple[int, int, int, int]) -> tuple[np.ndarray, int, np.ndarray]:
     with Image.open(path) as image:
-        region = image.convert("L").crop(crop)
+        region = image.convert("L").crop(crop_box(crop))
         feature = np.asarray(region.resize((64, 40), Image.Resampling.BILINEAR), dtype=np.int16)
         hash_value = dhash(region)
         rgb = np.asarray(region.resize((32, 20), Image.Resampling.BILINEAR), dtype=np.uint8)
@@ -350,7 +355,7 @@ def validate_chronological_order(candidates: list[Candidate]) -> None:
 
 def layout_metrics(path: Path, crop: tuple[int, int, int, int]) -> dict[str, float]:
     with Image.open(path) as image:
-        region = image.convert("RGB").crop(crop)
+        region = image.convert("RGB").crop(crop_box(crop))
         gray = np.asarray(region.convert("L"), dtype=np.float32)
         rgb = np.asarray(region, dtype=np.uint8)
     height, width = gray.shape
@@ -590,7 +595,7 @@ def make_contact_sheet(images: list[Path], candidates: list[Candidate], fps: flo
     sheet.save(output, quality=90)
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="从视频中提取 PPT 页面并生成 16:9 PPTX")
     parser.add_argument("video", type=Path, help="输入视频")
     parser.add_argument("--output", type=Path, help="输出 PPTX，默认放在视频旁")
@@ -605,7 +610,7 @@ def main() -> int:
     parser.add_argument("--no-software-exclusion", action="store_true", help="保留所有软件演示画面")
     parser.add_argument("--no-dedupe", action="store_true", help="关闭重复页合并")
     parser.add_argument("--resume", action="store_true", help="复用已有低分辨率帧")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     video = args.video.expanduser()
     if not video.is_file():
