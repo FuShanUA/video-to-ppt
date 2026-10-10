@@ -53,6 +53,14 @@ python3 -m pip install -r requirements.txt
 VIDEO_TO_PPT_PYTHON=/path/to/python ./app/build_app.sh
 ```
 
+构建自包含的 macOS GUI 应用：
+
+```bash
+./app/build_mac_app.sh
+```
+
+构建完成后会生成 `dist/VideoToPPT.app` 和 `dist/VideoToPPT-macOS-<架构>.zip`。这个版本内置 Python 依赖、FFmpeg 和 FFprobe。
+
 Windows 本地构建需要安装 Python、FFmpeg 和 PyInstaller，然后执行：
 
 ```powershell

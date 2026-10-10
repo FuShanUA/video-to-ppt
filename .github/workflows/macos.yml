@@ -1,0 +1,57 @@
+name: Build macOS App
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing release tag
+        required: true
+        default: v0.1.0
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-14, macos-13]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install FFmpeg
+        run: brew install ffmpeg
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+
+      - name: Build app
+        run: |
+          VIDEO_TO_PPT_PYTHON=python ./app/build_mac_app.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: VideoToPPT-macOS-${{ runner.arch }}
+          path: dist/VideoToPPT-macOS-*.zip
+
+      - name: Attach to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            tag="${{ inputs.release_tag }}"
+          else
+            tag="${{ github.ref_name }}"
+          fi
+          gh release upload "$tag" dist/VideoToPPT-macOS-*.zip --clobber

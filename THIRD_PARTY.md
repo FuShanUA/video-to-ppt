@@ -1,7 +1,7 @@
 # Third-party notices
 
-This release bundles FFmpeg executables from the BtbN Windows GPL builds:
+Windows releases bundle FFmpeg executables from the BtbN Windows GPL builds:
 
 https://github.com/BtbN/FFmpeg-Builds
 
-Those FFmpeg builds are licensed under the GPL. The corresponding source and build configuration are available from the linked repository. Users who redistribute this application must also comply with FFmpeg's GPL obligations.
+macOS releases bundle FFmpeg from Homebrew. FFmpeg is licensed under the GPL or LGPL depending on the enabled components; the Homebrew GPL build is used here. Users who redistribute this application must also comply with the applicable FFmpeg license obligations and provide or link to the corresponding source.
