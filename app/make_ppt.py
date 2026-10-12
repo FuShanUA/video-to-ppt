@@ -43,11 +43,11 @@ def natural_key(path: Path) -> tuple[tuple[int, object], ...]:
     )
 
 
-def build_presentation(folder: Path, output_path: Path | None = None) -> Path:
+def list_images(folder: Path) -> list[Path]:
     if not folder.is_dir():
         raise ValueError(f"不是文件夹：{folder}")
 
-    images = sorted(
+    return sorted(
         (
             path
             for path in folder.iterdir()
@@ -55,8 +55,16 @@ def build_presentation(folder: Path, output_path: Path | None = None) -> Path:
         ),
         key=natural_key,
     )
+
+
+def build_presentation(
+    folder: Path, output_path: Path | None = None, fit_mode: str = "fit"
+) -> Path:
+    images = list_images(folder)
     if not images:
         raise ValueError("文件夹里没有找到图片。")
+    if fit_mode not in {"fit", "cover"}:
+        raise ValueError("图片排版模式必须是 fit 或 cover。")
 
     presentation = Presentation()
     presentation.slide_width = Emu(12192000)
@@ -69,6 +77,28 @@ def build_presentation(folder: Path, output_path: Path | None = None) -> Path:
             source_aspect = image.width / image.height
 
         slide = presentation.slides.add_slide(blank_layout)
+
+        if fit_mode == "fit":
+            if source_aspect > target_aspect:
+                width = presentation.slide_width
+                height = int(width / source_aspect)
+                left = 0
+                top = int((presentation.slide_height - height) / 2)
+            else:
+                height = presentation.slide_height
+                width = int(height * source_aspect)
+                left = int((presentation.slide_width - width) / 2)
+                top = 0
+
+            slide.shapes.add_picture(
+                str(image_path),
+                left,
+                top,
+                width=width,
+                height=height,
+            )
+            continue
+
         picture = slide.shapes.add_picture(
             str(image_path),
             0,
