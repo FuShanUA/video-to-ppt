@@ -1,6 +1,12 @@
 on run
-	set chosenItem to choose file with prompt "请选择包含图片的文件夹或视频文件"
-	open {chosenItem}
+	set inputType to button returned of (display dialog "请选择输入类型" buttons {"图片文件夹", "视频文件", "取消"} default button "图片文件夹" cancel button "取消")
+	if inputType is "图片文件夹" then
+		set chosenItems to choose folder with prompt "请选择包含图片的文件夹" with multiple selections allowed
+		open chosenItems
+	else
+		set chosenItems to choose file with prompt "请选择视频文件" with multiple selections allowed
+		open chosenItems
+	end if
 end run
 
 on open droppedItems
