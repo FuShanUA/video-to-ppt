@@ -50,7 +50,7 @@ python3 -m pip install -r requirements.txt
 ./app/build_app.sh
 ```
 
-构建完成后会生成 `图片视频合成PPT.app`。应用会自动查找已安装依赖的 Python，也可以用环境变量指定：
+构建完成后会生成 `图片视频转PPT.app`。应用会自动查找已安装依赖的 Python，也可以用环境变量指定：
 
 ```bash
 VIDEO_TO_PPT_PYTHON=/path/to/python ./app/build_app.sh

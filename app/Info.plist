@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>图片视频合成PPT</string>
+	<string>图片视频转PPT</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -41,7 +41,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>图片视频合成PPT</string>
+	<string>图片视频转PPT</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>

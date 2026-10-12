@@ -2,7 +2,7 @@
 set -eu
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-APP_NAME="${APP_NAME:-图片视频合成PPT}"
+APP_NAME="${APP_NAME:-图片视频转PPT}"
 APP_PATH="$ROOT/$APP_NAME.app"
 
 command -v osacompile >/dev/null 2>&1 || {

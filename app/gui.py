@@ -190,7 +190,7 @@ class ImagePreviewDialog(tk.Toplevel):
 class VideoToPptApp(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
-        self.title("Video to PPT")
+        self.title("图片视频转PPT")
         self.geometry("760x620")
         self.minsize(700, 560)
 
